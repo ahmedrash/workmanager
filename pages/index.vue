@@ -1,7 +1,19 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="6" sm="8" md="6">
+      <div
+                      v-for="task in tasks"
+                      :key="task._id"
+                      class="task_item"
+                    >
+                      <ListItem
+                        :task="task"
+                        :userlist="employees"
+                        :authUser="authUser"
+                        :type="'tasks'"
+                      />
 
+      </div>
     </v-col>
     
     <v-col cols="6" sm="8" md="6">
@@ -143,10 +155,12 @@ import moment from "moment";
 import { BroadcastChannel } from 'broadcast-channel';
 import EmployeePicker from '~/components/employeepicker.vue'
 import TaskStatus from '~/components/task/status.vue'
+import ListItem from "~/components/listitems.vue";
 export default {
   components:{
     EmployeePicker,
-    TaskStatus
+    TaskStatus,
+    ListItem
   },
   data(){
     return {
@@ -163,6 +177,7 @@ export default {
       selectedOpen: false,
       events: [],
       colors: [],
+      tasks: []
     }
   },
   async asyncData ({ $axios }) {
@@ -197,8 +212,12 @@ export default {
           })
           .then((res) => {
             console.log(res);
-            this.events = res.assigned.tasks.map(e=>{
-              
+            this.tasks = res.assigned.tasks
+            this.events = res.assigned.tasks.filter(e=>{
+              if(e.schedule.length > 1){
+                return e
+              }
+            }).map(e=>{
               return {
                 name: e.name,
                 start: this.formatdatetime(e, 0),

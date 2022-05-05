@@ -6,7 +6,7 @@
       :class="'assigned_item zind_' + i"
     >
       <v-badge
-        :color="getEmployee(data).status"
+        :color="getEmployee(data).active? 'success' : 'grey lighten-2'"
         dot
         offset-x="10"
         offset-y="10"

@@ -1042,11 +1042,15 @@ export default {
     box-shadow: none !important;
   }
 
-  .c_image{
+  .comment_item img{
+    max-width: 100%;
+  }
+
+  .comment_item img.c_image{
     max-width: 84px;
   }
 
-  .s_image{
+  .comment_item img.s_image{
     max-width: 100px;
   }
 

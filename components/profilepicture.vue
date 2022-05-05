@@ -30,7 +30,7 @@ import Avatar from 'vue-avatar'
     },
   props: {
       item: { type: Object, required: false},
-      size:{ required: true}
+      size:{ required: true},
   },
   data(){
     return{
@@ -42,7 +42,8 @@ import Avatar from 'vue-avatar'
       if('profilepic' in this.item){
         if('path' in this.item.profilepic){
           if(this.item.profilepic.path != ''){
-            let img = process.env.imagePath+''+this.item.profilepic.path
+            let img = `${process.env.apiUrl}/cockpit/image?token=${process.env.aKey}&src=${this.item.profilepic._id}&w=128&h=128&o=true`
+            // process.env.imagePath+''+this.item.profilepic.path
             return img
           }
           return ''
