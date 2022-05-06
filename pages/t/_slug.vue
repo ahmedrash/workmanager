@@ -169,12 +169,32 @@
             </v-col>
 
             <v-col cols="6" class="d-flex justify-space-between flex-column position-relative">
-              <div class="message_block" ref="container">
-                <div v-for="item in comments" :key="'comment_'+item._id" :ref="'c_'+item._id">
+              <div class="message_block" id="message_block" ref="container">
+                <div v-for="item in comments" :key="'comment_'+item._id" :ref="item._id">
                 
-                  <Comment :comment="item" :authUser="authUser" :userlist="employees" @deleteItem="deleteItem($event)" @editItem="editItem($event)" class="mb-6"/>
+                  <Comment :comment="item" :authUser="authUser" :userlist="employees" @deleteItem="deleteItem($event)" @editItem="editItem($event)" @copylink="copylink($event)" :class="`mb-6 ${$route.hash == '#'+item._id? 'active':''}`"/>
                 
               </div>
+
+              <v-snackbar
+                v-model="snackbar"
+                top
+                right
+                absolute
+              >
+                {{ msg.text }}
+
+                <template v-slot:action="{ attrs }">
+                  <v-btn
+                    :color="msg.status"
+                    text
+                    v-bind="attrs"
+                    @click="snackbar = false"
+                  >
+                    Close
+                  </v-btn>
+                </template>
+              </v-snackbar>
               </div>
               
 
@@ -373,6 +393,8 @@
         <iframe class="fileviewer" :src="filepath"></iframe>
       </v-card>
     </v-dialog>
+
+    
   </div>
 </template>
 
@@ -448,7 +470,12 @@ export default {
       display: [],
       lists: [],
       nested: [],
-      tasks: []
+      tasks: [],
+      snackbar: false,
+      msg: {
+        text: '',
+        status: ''
+      }
     };
   },
   computed: {
@@ -477,10 +504,8 @@ export default {
     this.getAssets();
     this.getData()
     //this.start();
-
-
-    console.log(this.$nuxt.$route.path)
-
+    
+    
    
 
     this.editor = new Editor({
@@ -600,11 +625,21 @@ export default {
        container.scrollTop = container.scrollHeight;
       })
     },
-    scrollIntoView(id) {
-      // const container = this.$refs.container;
-      // container.scrollTop = container.scrollHeight;
-      // const el = this.$el.querySelector(id);
-      // console.log(el)
+    scrollIntoView() {
+      let id = this.$route.fullPath.split('#')[1]
+      const container = this.$refs.container;
+      
+      console.log(id)
+      const el = this.$refs[id][0];
+      this.$nextTick(() => {
+        console.log(
+          el.scrollTop,
+          el.offsetTop,
+          el.offsetParent
+          )
+        container.scrollTop = el.offsetTop - 12;
+      })
+      
       // if (el) {
       //   el.scrollIntoView();
       // }
@@ -614,7 +649,7 @@ export default {
       //   el.scrollIntoView();
       // }
 
-      console.log(this.$refs[id].$el)
+      //console.log(id)
       //.focus();
     },
     showEmoji(emoji) {
@@ -656,8 +691,10 @@ export default {
             this.task = res.info[0];
             this.project = res.project;
             this.comments = res.comments;
+            
             console.log(res);
             this.updateScroll()
+            setTimeout(this.scrollIntoView, 2000)
           });
       } catch (error) {
         console.log("error", error);
@@ -909,7 +946,31 @@ export default {
         .catch((error) => {
           this.onerror(error);
         });
+      },
+      async copylink(item) {
+        const container = document.querySelector('.v-dialog');
+        let link = "";
+        link = process.env.siteURL + "/t/" + item.tid._id + '/#' + item._id;
+        
+      //   console.log(item)
+      // let link = "";
+      // link = process.env.siteURL + "/t/" + item.tid._id + '#' + item._id;
+      try {
+        await this.$copyText(link, container);
+        this.msg ={
+              text: 'Link copied',
+              status: 'success'
+            }
+            this.snackbar = true
+      } catch (e) {
+        console.error(e);
+        this.msg ={
+          text: 'Failed copying',
+          status: 'error'
+        }
+        this.snackbar = true
       }
+    },
   },
 };
 </script>
@@ -1072,6 +1133,14 @@ export default {
     color: #ef3d59;
     opacity: 0;
     transition: all 0.3s;
+}
+
+.message_block .active{
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+}
+
+.comment_item.active{
+    border-color: #efc958 !important;
 }
 </style>
 

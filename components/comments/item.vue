@@ -16,7 +16,7 @@
 
       <div class="more_block">
         <v-btn icon small plain v-if="authUser._id == comment.by._id" @click="$emit('editItem', comment)"><v-icon small>ri-pencil-line</v-icon></v-btn>
-        <v-btn icon small plain><v-icon small>ri-link</v-icon></v-btn>
+        <v-btn icon small plain @click="copylink(comment)"><v-icon small>ri-link</v-icon></v-btn>
         <v-btn icon small plain v-if="authUser._id == comment.by._id" @click="deleteItem()"><v-icon small>ri-delete-bin-line</v-icon></v-btn>
       </div>
     </v-card-title>
@@ -37,7 +37,8 @@ export default {
   },
   data(){
     return {
-      loading: false
+      loading: false,
+      
     }
   },
   computed: {
@@ -111,6 +112,26 @@ export default {
     },
     onerror(e){
 
+    },
+    async copylink(item) {
+      this.$emit('copylink', item)
+      // let link = "";
+      // link = process.env.siteURL + "/t/" + item.tid._id + '#' + item._id;
+      // try {
+      //   await this.$copyText(link);
+      //   this.msg ={
+      //     text: link+' copied',
+      //     status: 'success'
+      //   }
+      //   this.snackbar = true
+      // } catch (e) {
+      //   console.error(e);
+      //   this.msg ={
+      //     text: 'Failed copying',
+      //     status: 'error'
+      //   }
+      //   this.snackbar = true
+      // }
     },
   },
 };
