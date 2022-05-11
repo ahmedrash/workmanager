@@ -1040,7 +1040,7 @@ export default {
 .message_block{
   height: calc(100vh - 125px);
   overflow-y: scroll;
-  padding-bottom: 125px;
+  padding-bottom: 200px;
 }
 
 .message_block p{
