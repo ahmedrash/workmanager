@@ -8,10 +8,10 @@
     content-class="dialog_block"
   >
     <v-card>
-      <v-card-title class="task_title_block">
-        <v-container>
+      <v-card-title class="task_title_block py-0">
+        <v-container class="py-0">
           <v-row>
-            <v-col v-if="task">
+            <v-col cols="12" md="10" v-if="task" class="py-0">
               <TaskInfo
                 :project="project"
                 :task="task"
@@ -20,7 +20,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="8" class="d-flex justify-space-between">
+            <v-col cols="12" md="2" class="d-flex justify-space-between py-0">
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeModal" icon
                 >
@@ -377,9 +377,16 @@
           tile
         >
           
-          <v-toolbar-title>Settings</v-toolbar-title>
+          <v-toolbar-title>{{selectedasset.title}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
+            <v-btn
+            icon
+            dark
+            :href="getassetURL(selectedasset)" :download="selectedasset.title" target="_blank"
+          >
+            <v-icon>ri-download-2-line</v-icon>
+          </v-btn>
             <v-btn
             icon
             dark
@@ -475,7 +482,8 @@ export default {
       msg: {
         text: '',
         status: ''
-      }
+      },
+      selectedasset: {}
     };
   },
   computed: {
@@ -606,16 +614,29 @@ export default {
         return r;
       }, []);
     },
+   
     viewfile(asset){
+      this.selectedasset = asset
+      let filetype = asset.path.split('.')
+      let ext = filetype[filetype.length-1].toLowerCase()
+      let fileurl = ''
+      if(ext == 'png' || ext == 'jpeg' || ext == 'jpg'){
+          this.dialogviewer = true
+          this.filepath = this.getassetURL(asset)
+      }
+      else{
           this.dialogviewer = true
           this.filepath = `https://docs.google.com/gview?url=${this.getassetURL(asset)}&embedded=true`
+      }
       },
       closeview(){
         this.dialogviewer = false
         this.filepath = '#'
+        this.selectedasset = {}
       },
       getassetURL(asset){
-          return `${process.env.imagePath}${asset.path}`
+        if(asset == {}) return
+        return `${process.env.imagePath}${asset.path}`
       },
     updateScroll(){
       const container = this.$refs.container;
@@ -1017,9 +1038,13 @@ export default {
 }
 
 .message_block{
-  height: calc(100vh - 200px);
+  height: calc(100vh - 125px);
   overflow-y: scroll;
-  padding-bottom: 200px;
+  padding-bottom: 125px;
+}
+
+.message_block p{
+  margin-bottom: 10px;
 }
 
 .comment_editor_block {
@@ -1148,8 +1173,10 @@ export default {
 /* Basic editor styles */
 .ProseMirror {
   min-height: 80px;
+  max-height: 300px;
+  overflow-y: scroll;
   > * + * {
-    margin-top: 0.75em;
+    margin-top: 0.15em !important;
   }
 
   ul,
@@ -1164,6 +1191,10 @@ export default {
   h5,
   h6 {
     line-height: 1.1;
+  }
+
+  p{
+    margin-top:0px;
   }
 
   code {

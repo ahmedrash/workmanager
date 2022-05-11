@@ -1,20 +1,19 @@
 <template>
-  <v-container>
+  <v-container class="py-0">
     <v-row>
       <v-col class="py-0">
-        <v-breadcrumbs :items="items">
+        <v-breadcrumbs :items="items" class="pa-0">
           <template v-slot:divider>
             <v-icon>mdi-chevron-right</v-icon>
           </template>
         </v-breadcrumbs>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row class="align-center">
       <v-col class="text-h5 py-0">
         {{ task.name }}
       </v-col>
-    </v-row>
-    <v-row>
+    
       <v-col class="py-3 d-flex">
         <DatePicker :entry="task" :collection="'tasks'" :authUser="authUser" :short="false"/>
         <TaskPriority :authUser="authUser" :id="task._id" :selectedstate="task.priority"  :collection="'tasks'" class="mr-3"/>
