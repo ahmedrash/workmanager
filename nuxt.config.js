@@ -139,5 +139,6 @@ export default {
         }
       }
     },
+    maxChunkSize: 300000
   }
 }
