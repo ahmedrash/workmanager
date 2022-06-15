@@ -190,6 +190,8 @@ z-index: 1;
   }
 .comment_row .col.first{
     border-right:1px solid rgba(0, 0, 0, 0.1) !important;
+    height: calc(100vh - 140px);
+    overflow-y: scroll;
   }
 
   .task_title_block{
