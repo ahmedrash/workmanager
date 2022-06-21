@@ -184,6 +184,7 @@ import { BroadcastChannel } from 'broadcast-channel';
 import Logout from '~/components/logout.vue'
 import ProfileAvatar from '~/components/profilepicture.vue'
 import ClientList from '~/components/clientslist.vue'
+
 export default {
   components:{
     Logout,
@@ -194,6 +195,8 @@ export default {
   name: 'DefaultLayout',
   data () {
     return {
+      listenersStarted: false,
+      idToken: "",
       clipped: true,
       drawer: true,
       fixed: false,
@@ -249,6 +252,7 @@ export default {
   },
   mounted(){
       this.testfunc()
+      // this.startListeners();
       const channel = new BroadcastChannel('actions');
       channel.onmessage = msg => {
         if(msg.action == 'reload'){
@@ -257,6 +261,24 @@ export default {
       };
     },
   methods:{
+        // FCM NOTIFICATION FUNCTIONS
+        // async startListeners() {
+        //   await this.requestPermission();
+        //   this.listenersStarted = true;
+        // },
+        // async requestPermission() {
+        //   try {
+        //     let permission = await Notification.requestPermission();
+        //     if (permission === 'granted') {
+        //       let token = await this.$fire.messaging.getToken();
+        //       if (token) {
+        //         console.log(token);
+        //       }
+        //     }
+        //   } catch (e) {
+        //     console.error("Error : ", e);
+        //   }
+        // },
         // test(){
         //   const channel = new BroadcastChannel('actions');
         //   channel.postMessage('I am not alone');

@@ -512,7 +512,9 @@ export default {
     this.getAssets();
     this.getData()
     //this.start();
-    
+    this.$fire.messaging.onMessage((payload) => {
+      console.info('Message received: ', payload)
+    })
     
    
 
@@ -789,6 +791,7 @@ export default {
         .then((response) => {
           if(this.mentionarray.length > 0){
             this.sendemail(data)
+            this.sendfcm(data)
           }
           if(this.editID){
             this.updateItem(response)
@@ -796,6 +799,7 @@ export default {
           else{
             this.comments.push(response)
           }
+
           
           this.editor.commands.clearContent()
           this.filelist = []
@@ -806,7 +810,7 @@ export default {
           this.onerror(error);
         });
 
-      console.log(data);
+      console.log("data", data);
     },
     onerror(error) {
       //   console.log(error);
@@ -815,6 +819,47 @@ export default {
       } else {
         console.log("Error", error);
       }
+    },
+    sendfcm(data){
+      let users = []
+      this.mentionarray.map((e) => {
+        users.push(e._id)
+      })
+
+      // let token = this.$fire.messaging.getToken();
+      // if (token) {
+      //   console.log(token);
+      // }
+
+      
+
+      const datas = JSON.stringify({
+        notification: {
+          title: 'firebase',
+          body: 'firebase is awesome',
+          click_action: 'http://localhost:3000/',
+          icon: 'http://localhost:3000/assets/images/brand-logo.png'
+        }, 
+        to: "cSzsTQpmi1VlxzWd-r4Cm6:APA91bH2KCKu0MRQsE0EI8jRsgByErTWLWz6gZEBQkRuZYjLl8QUVZqEQ6In1vPiu_DRcsNeH0g0r44zmo61vU6MHAGUjAfxjWWEeHca3TVfHQ17cXSRorgFIbohprRqJ9TqOZsTlfDi"
+      })
+        
+      this.$axios.$post(`https://fcm.googleapis.com/fcm/send`,datas,{
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': 'key=' + process.env.fcmKey
+        },
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        if (this.$axios.isCancel(error)) {
+          console.log('Request canceled', error)
+        } else {
+          console.log('Error', error)
+        }
+      })
+
     },
     deleteItem(val){
       //console.log(val)

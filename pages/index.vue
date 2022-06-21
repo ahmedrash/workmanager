@@ -152,10 +152,9 @@
 
 <script>
 import moment from "moment";
-import { BroadcastChannel } from 'broadcast-channel';
 import EmployeePicker from '~/components/employeepicker.vue'
 import TaskStatus from '~/components/task/status.vue'
-import ListItem from "~/components/listitems.vue";
+import ListItem from "~/components/listitems.vue" ;
 export default {
   components:{
     EmployeePicker,
