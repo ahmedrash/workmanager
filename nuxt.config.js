@@ -82,7 +82,8 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/firebase',
     'nuxt-vuex-localstorage',
-    'nuxt-clipboard2'
+    'nuxt-clipboard2',
+    'cookie-universal-nuxt',
   ],
 
   firebase: {

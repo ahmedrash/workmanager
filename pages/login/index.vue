@@ -128,8 +128,36 @@ export default {
       return user
     }
   },
-
+  mounted(){
+      this.startListeners();
+    },
   methods: {
+        // FCM NOTIFICATION FUNCTION
+        async startListeners() {
+          let token = await this.$fire.messaging.getToken();
+          if (token) {
+            // save token to cookie if it not exists in cookie
+            if (!this.$cookies.get('fcmToken')) {
+              this.$cookies.set('fcmToken', token, {
+                expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 365))
+              })
+            }
+          }
+          this.requestPermission();
+          this.listenersStarted = true;
+        },
+    
+        async requestPermission() {
+          try {
+            let permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+              console.log('Notification permission granted.');
+              this.$cookies.remove('fcmToken');
+            }
+          } catch (e) {
+            console.error("Error : ", e);
+          }
+        },
     submit ({$axios}) {
       this.$v.$touch()
       if(this.username != "" && this.password != ""){
