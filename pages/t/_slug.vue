@@ -27,7 +27,7 @@
                 <v-icon>ri-close-line</v-icon>
                 </v-btn
               >
-             
+
             </v-col>
           </v-row>
         </v-container>
@@ -36,19 +36,19 @@
       <v-divider></v-divider>
 
       <v-card-text ref="cardContainer" class="px-0 pb-0 comment-main-block">
-        
+
         <v-container class="comment_container pb-0">
           <v-row class="comment_row">
             <v-col cols="6" class="first vfa-demo">
               <v-row>
                 <v-col class="right_desc_block">
-                 
+
                 <ez-tiptap
                   :editable="true"
                   v-model="task.desc"
                   class="elevation-0"
                 />
-                
+
 
                 <v-btn @click="savetask()" class="ml-3" small>
                   <v-icon x-small class="mr-2">ri-save-line</v-icon> Save
@@ -61,7 +61,7 @@
                   </v-col
                   >
                   <v-col class="caption">
-                    
+
                   </v-col>
                   <v-col class="col-1 text-center caption"
                     >ASSIG.</v-col
@@ -131,23 +131,23 @@
                         @statechange="statechange($event)"
                       />
 
-                      
+
                     </div>
                     </div>
-                      
+
                     </div>
                 </div>
 
               <Assets class="mt-5" :lists="assetlist" :authUser="authUser" :userlist="employees" @deleteAsset="deleteAsset($event)" @updateAsset="updateAsset($event)" @viewfile="viewfile($event)"/>
 
-  
+
               <!-- <file-viewer
         filename="sample.pdf"
         url="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
       /> -->
-              <!-- <VueFileAgent 
-              :uploadUrl="uploadURL" 
-              v-model="fileRecords" 
+              <!-- <VueFileAgent
+              :uploadUrl="uploadURL"
+              v-model="fileRecords"
               ref="vfaDemoRef"
               :uploadHeaders="{}"
               :multiple="true"
@@ -155,7 +155,7 @@
               :theme="'list'"
               @select="filesSelected($event)"
               >
-                
+
                 <template v-slot:file-preview-new>
                   <v-btn color="grey" icon tile plain key="new">
                       <v-icon>ri-attachment-2</v-icon>
@@ -171,9 +171,9 @@
             <v-col cols="6" class="d-flex justify-space-between flex-column position-relative">
               <div class="message_block" id="message_block" ref="container">
                 <div v-for="item in comments" :key="'comment_'+item._id" :ref="item._id">
-                
+
                   <Comment :comment="item" :authUser="authUser" :userlist="employees" @deleteItem="deleteItem($event)" @editItem="editItem($event)" @copylink="copylink($event)" :class="`mb-6 ${$route.hash == '#'+item._id? 'active':''}`"/>
-                
+
               </div>
 
               <v-snackbar
@@ -196,7 +196,7 @@
                 </template>
               </v-snackbar>
               </div>
-              
+
 
               <div class="comment_editor_block" ref="editorblock">
                 <v-row class="elevation-2">
@@ -239,17 +239,17 @@
                       />
                     </v-menu>
 
-                    <VueFileAgent 
-                    :uploadUrl="uploadURL" 
-                    v-model="fileRecords" 
+                    <VueFileAgent
+                    :uploadUrl="uploadURL"
+                    v-model="fileRecords"
                     ref="vfaDemoRef"
                     :uploadHeaders="{}"
                     :multiple="true"
                     :deletable="true"
-                    
+
                     @select="filesSelected($event)"
                     >
-                      
+
                       <template v-slot:file-preview-new>
                         <v-btn color="grey" icon tile plain key="new">
                             <v-icon>ri-attachment-2</v-icon>
@@ -376,7 +376,7 @@
           dark
           tile
         >
-          
+
           <v-toolbar-title>{{selectedasset.title}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
@@ -401,7 +401,7 @@
       </v-card>
     </v-dialog>
 
-    
+
   </div>
 </template>
 
@@ -478,6 +478,7 @@ export default {
       lists: [],
       nested: [],
       tasks: [],
+      mentionUser: [],
       snackbar: false,
       msg: {
         text: '',
@@ -499,11 +500,11 @@ export default {
       `/cockpit/listUsers?token=${process.env.aKey}`);
 
     store.commit("localStorage/SET_USERLIST", data);
-    console.log(data)
+    // console.log(data)
     return { employees: data };
   },
   mounted() {
-    
+
     // Attach listeners for handling clicks outside the card, while preventing propagation
     // of clicks in the cards
     this.$refs.cardContainer.addEventListener("click", this.stopPropagation);
@@ -512,10 +513,6 @@ export default {
     this.getAssets();
     this.getData()
     //this.start();
-    
-    
-   
-
     this.editor = new Editor({
       content: "",
       extensions: [
@@ -532,12 +529,13 @@ export default {
             class: "mention text-body-2 mr-1 success--text",
           },
           renderLabel:({ options, node }) => {
+            console.log("node", node);
             const index = this.mentionarray.findIndex(object => object.id === node.attrs.id);
 
             if (index === -1) {
               this.mentionarray.push(node.attrs);
             }
-            console.log(this.mentionarray)
+            // console.log(this.mentionarray)
             return `${options.suggestion.char}${
               node.attrs.label ?? node.attrs.id
             }`;
@@ -564,6 +562,20 @@ export default {
     },
   },
   methods: {
+    getUserData(id) {
+      try {
+          this.$axios.$post(`/cockpit/listUsers?token=${process.env.aKey}`,{
+            filter:{
+              _id: id
+            }
+          })
+          .then((res) => {
+            this.mentionUser = res[0];
+          });
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
     updatedisplay(i) {
       // this.display[i] = !this.display[i];
       // //console.log(this.display);
@@ -614,7 +626,7 @@ export default {
         return r;
       }, []);
     },
-   
+
     viewfile(asset){
       this.selectedasset = asset
       let filetype = asset.path.split('.')
@@ -649,7 +661,7 @@ export default {
     scrollIntoView() {
       let id = this.$route.fullPath.split('#')[1]
       const container = this.$refs.container;
-      
+
       console.log(id)
       const el = this.$refs[id][0];
       this.$nextTick(() => {
@@ -660,7 +672,7 @@ export default {
           )
         container.scrollTop = el.offsetTop - 12;
       })
-      
+
       // if (el) {
       //   el.scrollIntoView();
       // }
@@ -712,7 +724,7 @@ export default {
             this.task = res.info[0];
             this.project = res.project;
             this.comments = res.comments;
-            
+
             console.log(res);
             this.updateScroll()
             setTimeout(this.scrollIntoView, 2000)
@@ -745,7 +757,7 @@ export default {
         else{
           return this.$nuxt.context.from.path;
         }
-        
+
       } else {
         return "/projects/" + this.task.pid._id;
       }
@@ -789,6 +801,7 @@ export default {
         .then((response) => {
           if(this.mentionarray.length > 0){
             this.sendemail(data)
+            this.sendfcm(response)
           }
           if(this.editID){
             this.updateItem(response)
@@ -796,8 +809,9 @@ export default {
           else{
             this.comments.push(response)
           }
-          
+
           this.editor.commands.clearContent()
+          this.mentionarray = [];
           this.filelist = []
           this.getAssets()
           this.updateScroll()
@@ -806,7 +820,7 @@ export default {
           this.onerror(error);
         });
 
-      console.log(data);
+      console.log("data", data);
     },
     onerror(error) {
       //   console.log(error);
@@ -815,6 +829,47 @@ export default {
       } else {
         console.log("Error", error);
       }
+    },
+    sendfcm(data){
+      let users = []
+      this.mentionarray.map((e) => {
+        users.push(e.id)
+        this.getUserData(e.id);
+
+        let user_fcm = this.employees.filter((u) => { return u._id === e.id });
+
+        if(user_fcm[0]?.fcmToken){
+
+          const notify = JSON.stringify({
+            notification: {
+              title: "You have a notification!",
+              body: "You were mentioned in a comment!",
+              click_action: process.env.siteURL + "/t/" + data.tid._id + '/#' + data._id,
+              icon: process.env.siteURL + "/Asset%202@300x.png"
+            },
+            to: user_fcm[0]?.fcmToken
+          })
+
+          this.$axios.$post(`https://fcm.googleapis.com/fcm/send`,notify,{
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'key=' + process.env.fcmKey
+            },
+          })
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              if (this.$axios.isCancel(error)) {
+                console.log('Request canceled', error)
+              } else {
+                console.log('Error', error)
+              }
+            })
+
+          }
+
+      })
     },
     deleteItem(val){
       //console.log(val)
@@ -847,7 +902,7 @@ export default {
           e.file.ext = e.ext
           formData.append("files["+index+"]", e.file)
         })
-        
+
          this.$axios.$post(`/cockpit/addAssets?token=${this.authUser.api_key}`,formData,{
           headers: {
                     'Content-Type': 'multipart/form-data'
@@ -864,7 +919,7 @@ export default {
               title: e.title
             })
               })
-          
+
         })
         .catch(error => {
           if (this.$axios.isCancel(error)) {
@@ -905,7 +960,7 @@ export default {
           this.onerror(error);
         });
         }
-        
+
       },
       updateAsset(val){
         let commentid = val.commentid
@@ -972,7 +1027,7 @@ export default {
         const container = document.querySelector('.v-dialog');
         let link = "";
         link = process.env.siteURL + "/t/" + item.tid._id + '/#' + item._id;
-        
+
       //   console.log(item)
       // let link = "";
       // link = process.env.siteURL + "/t/" + item.tid._id + '#' + item._id;
@@ -1007,7 +1062,7 @@ export default {
 .comment-main-block {
   padding: 0px !important;
 }
-.dialog_block .v-dialog--fullscreen { 
+.dialog_block .v-dialog--fullscreen {
   display: block !important;
  }
 

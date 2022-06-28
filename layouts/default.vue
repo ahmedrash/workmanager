@@ -7,7 +7,7 @@
       fixed
       app
     >
-    
+
     <v-list-item class="px-2">
         <v-list-item-avatar color="transparent" tile>
           <v-img src="/Asset 2@300x.png"></v-img>
@@ -24,7 +24,7 @@
       </v-list-item>
 
       <v-divider></v-divider>
-      
+
       <v-list class="side_menu">
         <div v-for="(item, i) in items" :key="i">
           <v-list-item
@@ -41,7 +41,7 @@
           </v-list-item-content>
         </v-list-item>
         </div>
-        
+
 
         <!-- <v-list-item @click="test()">
           <v-list-item-content>
@@ -51,7 +51,7 @@
 
         <v-divider></v-divider>
     </v-list>
-      
+
 
     <ClientList/>
     </v-navigation-drawer>
@@ -184,6 +184,7 @@ import { BroadcastChannel } from 'broadcast-channel';
 import Logout from '~/components/logout.vue'
 import ProfileAvatar from '~/components/profilepicture.vue'
 import ClientList from '~/components/clientslist.vue'
+
 export default {
   components:{
     Logout,
@@ -194,6 +195,8 @@ export default {
   name: 'DefaultLayout',
   data () {
     return {
+      listenersStarted: false,
+      idToken: "",
       clipped: true,
       drawer: true,
       fixed: false,
@@ -249,14 +252,71 @@ export default {
   },
   mounted(){
       this.testfunc()
+      this.startListeners();
       const channel = new BroadcastChannel('actions');
       channel.onmessage = msg => {
         if(msg.action == 'reload'){
-          
+
         }
       };
     },
   methods:{
+        // FCM NOTIFICATION FUNCTIONS
+        async startListeners() {
+
+          await this.requestPermission();
+          let token = await this.$fire.messaging.getToken();
+          if (token) {
+            // save token to cookie if it not exists in cookie
+            if (!this.$cookies.get('fcmToken')) {
+              this.$cookies.set('fcmToken', token, {
+                expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 365))
+              })
+            }
+
+            // save token to user if it not exists in user
+            if (!this.authUser.fcmToken) {
+              this.$store.commit('localStorage/SET_AUTHUSER', {
+                ...this.authUser,
+                fcmToken: token
+              })
+            }
+
+            // update token if it changed
+            if (this.authUser.fcmToken !== token) {
+              this.$store.commit('localStorage/SET_AUTHUSER', {
+                ...this.authUser,
+                fcmToken: token
+              })
+            }
+          }
+          await this.updateUser(this.$store.state.localStorage.authUser)
+          this.$cookies.remove('fcmToken');
+          this.listenersStarted = true;
+        },
+        async requestPermission() {
+          try {
+            let permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+              console.log('Notification permission granted.');
+            }
+          } catch (e) {
+            console.error("Error : ", e);
+          }
+        },
+        async updateUser(userData){
+          try {
+            this.$axios
+              .$post(`/cockpit/saveUser?token=${this.authUser.api_key}`, {
+                user: userData,
+              })
+              .then((res) => {
+                console.log(res);
+              });
+          } catch (error) {
+            console.log("error", error);
+          }
+        },
         // test(){
         //   const channel = new BroadcastChannel('actions');
         //   channel.postMessage('I am not alone');
@@ -276,7 +336,7 @@ export default {
         },
         gototaskstatepage(state){
           let path = this.$nuxt.$route.path.split('/')
-          
+
 
           let newpath = ''
           if(state == ''){

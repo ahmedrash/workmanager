@@ -80,9 +80,29 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
+    '@nuxtjs/firebase',
     'nuxt-vuex-localstorage',
-    'nuxt-clipboard2'
+    'nuxt-clipboard2',
+    'cookie-universal-nuxt',
   ],
+
+  firebase: {
+    config: {
+      apiKey: "AIzaSyAwTXndTLOu0VyObDK5k-fTUqW9XEeg_tw",
+      authDomain: "sdtest-project.firebaseapp.com",
+      projectId: "sdtest-project",
+      storageBucket: "sdtest-project.appspot.com",
+      messagingSenderId: "1065175353247",
+      appId: "1:1065175353247:web:1bc7e3e9b448f89982dfaa"
+    },
+    services: {
+      messaging: {
+        createServiceWorker: true,
+        fcmPublicVapidKey: process.env.fcmPublicVapidKey
+      },
+    }
+  },
+
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     // proxy: true
