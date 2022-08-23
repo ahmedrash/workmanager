@@ -111,7 +111,7 @@ z-index: 1;
 
 .v-chip__content{
     position: relative;
-    
+
 }
 
 .v-application--is-ltr .v-chip .v-chip__close.v-icon.v-icon--right{
@@ -144,7 +144,7 @@ z-index: 1;
   }
 
   .ql-toolbar.ql-snow{
-    border-color: rgba(0, 0, 0, 0.1) !important; 
+    border-color: rgba(0, 0, 0, 0.1) !important;
   }
 
   .right_desc_block .sticky-menu{
@@ -175,7 +175,7 @@ z-index: 1;
     transition: none !important;
   }
 
-  .dialog_block.v-dialog--fullscreen { 
+  .dialog_block.v-dialog--fullscreen {
     display: block !important;
     transition: none !important;
    }
@@ -190,7 +190,7 @@ z-index: 1;
   }
 .comment_row .col.first{
     border-right:1px solid rgba(0, 0, 0, 0.1) !important;
-    height: calc(100vh - 140px);
+    height: calc(100vh - 200px);
     overflow-y: scroll;
   }
 

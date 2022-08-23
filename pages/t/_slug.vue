@@ -1,12 +1,12 @@
 <template>
-<div>
-  <v-dialog
-    v-model="dialogslug"
-    fullscreen
-    hide-overlay
-    transition="dialog-bottom-transition"
-    content-class="dialog_block"
-  >
+<v-container fluid>
+<!--  <v-dialog-->
+<!--    v-model="dialogslug"-->
+<!--    fullscreen-->
+<!--    hide-overlay-->
+<!--    transition="dialog-bottom-transition"-->
+<!--    content-class="dialog_block"-->
+<!--  >-->
     <v-card>
       <v-card-title class="task_title_block py-0">
         <v-container class="py-0">
@@ -363,7 +363,7 @@
         </v-container>
       </v-card-text>
     </v-card>
-  </v-dialog>
+<!--  </v-dialog>-->
 
   <v-dialog
       v-model="dialogviewer"
@@ -402,7 +402,7 @@
     </v-dialog>
 
 
-  </div>
+</v-container>
 </template>
 
 <script>
@@ -659,19 +659,21 @@ export default {
       })
     },
     scrollIntoView() {
-      let id = this.$route.fullPath.split('#')[1]
-      const container = this.$refs.container;
+      let id = this.$route?.fullPath?.split('#')[1]
+      const container = this.$refs?.container;
 
-      console.log(id)
-      const el = this.$refs[id][0];
-      this.$nextTick(() => {
-        console.log(
-          el.scrollTop,
-          el.offsetTop,
-          el.offsetParent
+      // console.log(id)
+      if (id !== undefined) {
+        const el = this.$refs[id][0];
+        this.$nextTick(() => {
+          console.log(
+            el.scrollTop,
+            el.offsetTop,
+            el.offsetParent
           )
-        container.scrollTop = el.offsetTop - 12;
-      })
+          container.scrollTop = el.offsetTop - 12;
+        })
+      }
 
       // if (el) {
       //   el.scrollIntoView();
@@ -819,8 +821,6 @@ export default {
         .catch((error) => {
           this.onerror(error);
         });
-
-      console.log("data", data);
     },
     onerror(error) {
       //   console.log(error);
@@ -842,8 +842,8 @@ export default {
 
           const notify = JSON.stringify({
             notification: {
-              title: "You have a notification!",
-              body: "You were mentioned in a comment!",
+              title: "Hi " + user_fcm[0]?.name + ", You have a notification!",
+              body: "You were mentioned in a comment to " + this.project.name,
               click_action: process.env.siteURL + "/t/" + data.tid._id + '/#' + data._id,
               icon: process.env.siteURL + "/Asset%202@300x.png"
             },
@@ -1024,15 +1024,17 @@ export default {
         });
       },
       async copylink(item) {
-        const container = document.querySelector('.v-dialog');
+        // const container = document.querySelector('.v-card-title');
         let link = "";
         link = process.env.siteURL + "/t/" + item.tid._id + '/#' + item._id;
 
-      //   console.log(item)
+        // console.log(link)
       // let link = "";
       // link = process.env.siteURL + "/t/" + item.tid._id + '#' + item._id;
       try {
-        await this.$copyText(link, container);
+        // await this.$copyText(link, container);
+        // document.execCommand("copy");
+        await navigator.clipboard.writeText(link);
         this.msg ={
               text: 'Link copied',
               status: 'success'
@@ -1047,7 +1049,7 @@ export default {
         this.snackbar = true
       }
     },
-  },
+  }
 };
 </script>
 
@@ -1093,9 +1095,10 @@ export default {
 }
 
 .message_block{
-  height: calc(100vh - 125px);
+  height: calc(100vh - 213px);
   overflow-y: scroll;
-  padding-bottom: 200px;
+  padding-bottom: 181px;
+  padding-right: 20px;
 }
 
 .message_block p{
@@ -1103,12 +1106,12 @@ export default {
 }
 
 .comment_editor_block {
-    position: absolute;
-    left: 0px;
-    bottom: 35px;
-    width: 100%;
-    padding: 12px;
-    background-color: #fff;
+  position: absolute;
+  left: 0px;
+  bottom: 9px;
+  width: 96%;
+  padding: 15px;
+  background-color: #fff;
 }
 
 

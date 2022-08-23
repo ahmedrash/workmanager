@@ -8,7 +8,7 @@
       app
     >
 
-    <v-list-item class="px-2">
+    <v-list-item class="px-2" @click="gotodashboardpage()">
         <v-list-item-avatar color="transparent" tile>
           <v-img src="/Asset 2@300x.png"></v-img>
         </v-list-item-avatar>
@@ -346,8 +346,11 @@ export default {
              newpath = '/'+path[1]+'/'+state+'/'+path[path.length - 1]
           }
 
-          console.log(newpath)
+          // console.log(newpath)
           this.$router.push(newpath)
+        },
+        gotodashboardpage(){
+          this.$router.push('/')
         },
         shouldshow(){
           let path = this.$nuxt.$route.path.split('/')
