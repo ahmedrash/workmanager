@@ -26,6 +26,7 @@
           expand-icon="ri-arrow-drop-down-fill"
           :open-on-click="false"
           :active.sync="active"
+          :open.sync="open"
           return-object
         >
           <template v-slot:prepend="{ item, open }">
@@ -196,6 +197,7 @@ export default {
       initiallyOpen: ["public"],
       tree: [],
       clients: [],
+      open: [],
       dialog: false,
       editdialog: false,
       editedItem: {
@@ -241,8 +243,12 @@ export default {
         this.$axios
           .$post(`/getclientsnprojects?token=${process.env.cKey}`)
           .then((res) => {
-            // console.log(res);
-            this.clients = res.entries;
+            console.log("clients", res.entries);
+            this.clients = res.entries.sort(function(a, b){
+              if(a.name < b.name) { return -1; }
+              if(a.name > b.name) { return 1; }
+              return 0;
+            });
           });
       } catch (error) {
         console.log("error", error);

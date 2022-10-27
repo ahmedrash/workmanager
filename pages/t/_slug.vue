@@ -11,6 +11,7 @@
       <v-card-title class="task_title_block py-0">
         <v-container class="py-0">
           <v-row>
+
             <v-col cols="12" md="10" v-if="task" class="py-0">
               <TaskInfo
                 :project="project"
@@ -20,15 +21,6 @@
               />
             </v-col>
 
-            <v-col cols="12" md="2" class="d-flex justify-space-between py-0">
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeModal" icon
-                >
-                <v-icon>ri-close-line</v-icon>
-                </v-btn
-              >
-
-            </v-col>
           </v-row>
         </v-container>
       </v-card-title>
@@ -39,7 +31,7 @@
 
         <v-container class="comment_container pb-0">
           <v-row class="comment_row">
-            <v-col cols="6" class="first vfa-demo">
+            <v-col class="first vfa-demo">
               <v-row>
                 <v-col class="right_desc_block">
 
@@ -168,7 +160,7 @@
               </button> -->
             </v-col>
 
-            <v-col cols="6" class="d-flex justify-space-between flex-column position-relative">
+            <v-col class="d-flex justify-space-between flex-column position-relative">
               <div class="message_block" id="message_block" ref="container">
                 <div v-for="item in comments" :key="'comment_'+item._id" :ref="item._id">
 
@@ -801,6 +793,7 @@ export default {
           }
         )
         .then((response) => {
+          console.log('data data', data)
           if(this.mentionarray.length > 0){
             this.sendemail(data)
             this.sendfcm(response)
@@ -1066,7 +1059,7 @@ export default {
 }
 .dialog_block .v-dialog--fullscreen {
   display: block !important;
- }
+}
 
 .mention {
   padding: 5px;
@@ -1076,14 +1069,14 @@ export default {
 
 .subtask_title{
   font-size: 1.25rem !important;
-    line-height: 1.5!important;
-    overflow: hidden!important;
-    text-overflow: ellipsis!important;
-    white-space: nowrap!important;
-    font-family: 'Raleway', sans-serif!important;
-    color: rgba(0, 0, 0, 0.87)!important;
-    font-weight: 400!important;
-    letter-spacing: 0.0071428571em!important;
+  line-height: 1.5!important;
+  overflow: hidden!important;
+  text-overflow: ellipsis!important;
+  white-space: nowrap!important;
+  font-family: 'Raleway', sans-serif!important;
+  color: rgba(0, 0, 0, 0.87)!important;
+  font-weight: 400!important;
+  letter-spacing: 0.0071428571em!important;
 }
 
 .mention:hover {
@@ -1109,113 +1102,111 @@ export default {
   position: absolute;
   left: 0px;
   bottom: 9px;
-  width: 96%;
+  width: 100%;
   padding: 15px;
   background-color: #fff;
 }
 
-
-
 .vfa-demo {
-    position: relative;
-  }
+  position: relative;
+}
 
-  .vfa-demo .file-preview-wrapper::before {
-    background: transparent;
-  }
+.vfa-demo .file-preview-wrapper::before {
+  background: transparent;
+}
 
-  .vfa-demo .file-row {
-    position: relative;
-    z-index: 15;
-    line-height: 24px;
-    text-align: left;
-    background: #EEE;
-    margin-bottom: 5px;
-    padding: 2px 5px;
-  }
+.vfa-demo .file-row {
+  position: relative;
+  z-index: 15;
+  line-height: 24px;
+  text-align: left;
+  background: #EEE;
+  margin-bottom: 5px;
+  padding: 2px 5px;
+}
 
-  .vfa-demo .remove {
-    float: right;
-    margin-top: -3px;
-  }
+.vfa-demo .remove {
+  float: right;
+  margin-top: -3px;
+}
 
-  .vfa-demo .progress {
-    float: right;
-    width: 85px;
-    height: 10px;
-    margin-top: 7px;
-    margin-right: 10px;
-    background: #FFF;
-    border: 1px solid #AAA;
-  }
+.vfa-demo .progress {
+  float: right;
+  width: 85px;
+  height: 10px;
+  margin-top: 7px;
+  margin-right: 10px;
+  background: #FFF;
+  border: 1px solid #AAA;
+}
 
-  .vfa-demo .progress.completed {
-    display: none;
-  }
+.vfa-demo .progress.completed {
+  display: none;
+}
 
-  .vfa-demo .drop-help-text {
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    margin: 2px;
-    background: rgba(255, 255, 255, 0.75);
-    z-index: 1200;
-    font-size: 32px;
-    font-weight: bold;
-    color: #888;
-    align-items: center;
-    justify-content: center;
-    display: none;
-  }
+.vfa-demo .drop-help-text {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  margin: 2px;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 1200;
+  font-size: 32px;
+  font-weight: bold;
+  color: #888;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
 
-  .vfa-demo .is-drag-over .drop-help-text {
-    display: flex;
-  }
+.vfa-demo .is-drag-over .drop-help-text {
+  display: flex;
+}
 
-  .vfa-demo .upload-block  {
-    border: 2px dashed transparent;
-    padding: 20px;
-    padding-top: 0;
-  }
+.vfa-demo .upload-block  {
+  border: 2px dashed transparent;
+  padding: 20px;
+  padding-top: 0;
+}
 
-  .vfa-demo .is-drag-over.upload-block {
-    border-color: #AAA;
-  }
+.vfa-demo .is-drag-over.upload-block {
+  border-color: #AAA;
+}
 
-  .vfa-demo .vue-file-agent {
-    border: 0 !important;
-    box-shadow: none !important;
-  }
+.vfa-demo .vue-file-agent {
+  border: 0 !important;
+  box-shadow: none !important;
+}
 
-  .comment_item img{
-    max-width: 100%;
-  }
+.comment_item img{
+  max-width: 100%;
+}
 
-  .comment_item img.c_image{
-    max-width: 84px;
-  }
+.comment_item img.c_image{
+  max-width: 84px;
+}
 
-  .comment_item img.s_image{
-    max-width: 100px;
-  }
+.comment_item img.s_image{
+  max-width: 100px;
+}
 
-  .vue-file-agent.file-input-wrapper {
-    position: relative;
-    border: 0px dashed #aaa;
-    text-align: center;
-    -webkit-transition: all .6s;
-    transition: all .6s;
+.vue-file-agent.file-input-wrapper {
+  position: relative;
+  border: 0px dashed #aaa;
+  text-align: center;
+  -webkit-transition: all .6s;
+  transition: all .6s;
 }
 
 .filelist .v-chip .v-chip__close.v-icon.v-icon--right {
-    position: absolute;
-    top: 1px;
-    right: -8px;
-    z-index: 20000;
-    background-color: #fff;
-    border-radius: 9px;
-    color: #ef3d59;
-    opacity: 0;
-    transition: all 0.3s;
+  position: absolute;
+  top: 1px;
+  right: -8px;
+  z-index: 20000;
+  background-color: #fff;
+  border-radius: 9px;
+  color: #ef3d59;
+  opacity: 0;
+  transition: all 0.3s;
 }
 
 .message_block .active{
@@ -1223,7 +1214,36 @@ export default {
 }
 
 .comment_item.active{
-    border-color: #efc958 !important;
+  border-color: #efc958 !important;
+}
+
+/* Mobile */
+@media screen and (max-width: 767px) {
+  .comment_editor_block {
+    bottom: -11px;
+    padding: 11px;
+  }
+
+  .message_block {
+    padding-bottom: 82px;
+    padding-right: 0;
+  }
+
+  .comment_item img.s_image{
+    max-width: 100% !important;
+  }
+
+  .comment_container {
+    padding: 0;
+  }
+
+  .v-sheet.v-card:not(.v-sheet--outlined) {
+    box-shadow: none;
+  }
+
+  .container--fluid {
+    padding: 0;
+  }
 }
 </style>
 

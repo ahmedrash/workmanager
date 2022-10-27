@@ -38,7 +38,7 @@ export default {
   data(){
     return {
       loading: false,
-      
+
     }
   },
   computed: {
@@ -102,7 +102,7 @@ export default {
         if(ext == 'png' || ext == 'jpeg' || ext == 'jpg'){
           // this.editor.commands.setImage({ src: source, alt: e.decription, title: e.title, class: 'view_image' })
           msg += '<p><a href="'+source+'" download target="_blank"><img src="'+source+'" class="s_image" data-assetid="'+e._id+'"/><br>'+e.title+'</a></p>'
-          
+
         }
         else{
         msg += '<p><a href="'+source+'" download><img src="/svg/'+filetype[filetype.length-1]+'.svg" class="c_image" data-assetid="'+e._id+'"/><br>'+e.title+'</a></p>'
@@ -166,5 +166,21 @@ export default {
 
 .comment_item:hover .more_block{
   display: flex;
+}
+
+/* Mobile */
+@media screen and (max-width: 767px) {
+  .p_avatar {
+    display: none;
+    left: 0;
+  }
+
+  .v-application .ml-16 {
+    margin-left: 0 !important;
+  }
+
+  .more_block{
+    width: 90px;
+  }
 }
 </style>

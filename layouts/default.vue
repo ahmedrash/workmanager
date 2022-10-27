@@ -58,10 +58,13 @@
     <v-app-bar
       fixed
       app
-      :elevation="0"
+      rounded
+      :elevation="4"
       outlined
       height="57"
     >
+
+    <v-app-bar-nav-icon @click="drawerOpen"><v-icon small>ri-menu-line</v-icon></v-app-bar-nav-icon>
 
     <Avatar
       :username="title"
@@ -76,7 +79,7 @@
 <v-spacer />
 <v-btn
   elevation="0"
-  class="mr-2"
+  class="mr-2 top_status_button"
   small
   @click="gototaskstatepage('')"
   v-if="shouldshow()"
@@ -86,7 +89,7 @@ To Do
 </v-btn>
       <v-btn
   elevation="0"
-  class="mr-2"
+  class="mr-2 top_status_button"
   small
   @click="gototaskstatepage('c')"
   v-if="shouldshow()"
@@ -97,7 +100,7 @@ Completed
 
 <v-btn
   elevation="0"
-  class="mr-2"
+  class="mr-2 top_status_button"
   small
   @click="gototaskstatepage('r')"
   v-if="shouldshow()"
@@ -336,14 +339,16 @@ export default {
         },
         gototaskstatepage(state){
           let path = this.$nuxt.$route.path.split('/')
+          console.log("path", path, 'state', state)
 
+          // let sta = path[1] == 't' ?  '/t'  : '/'+path[1] ;
 
           let newpath = ''
           if(state == ''){
-            newpath = '/'+path[1]+'/'+path[path.length - 1]
+            newpath = '/' + path[1] + '/'+path[path.length - 1]
           }
           else{
-             newpath = '/'+path[1]+'/'+state+'/'+path[path.length - 1]
+             newpath = '/' + path[1] + '/'+state+'/'+path[path.length - 1]
           }
 
           // console.log(newpath)
@@ -352,9 +357,16 @@ export default {
         gotodashboardpage(){
           this.$router.push('/')
         },
+        drawerOpen() {
+          if (this.drawer) {
+            this.drawer = false
+          } else {
+            this.drawer = true;
+          }
+        },
         shouldshow(){
           let path = this.$nuxt.$route.path.split('/')
-          if(path[1] == 'clients' || path[1] == 'projects'){
+          if(path[1] == 'clients' || path[1] == 'projects' || path[1] == 't'){
             return true
           }
           else{
@@ -373,5 +385,12 @@ export default {
 
 .v-toolbar__title{
   font-size: 16px;
+}
+
+/* Mobile */
+@media screen and (max-width: 767px) {
+  .top_status_button {
+    display: none;
+  }
 }
 </style>

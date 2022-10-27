@@ -180,10 +180,10 @@
                         @statechange="statechange($event)"
                       />
 
-                      
+
                     </div>
                     </div>
-                      
+
                     </div>
                   </draggable>
                 </div>
@@ -388,7 +388,7 @@ export default {
         desc: this.selectedProject.desc,
       };
       this.$axios
-        .$post(`/collections/save/projects?token=${this.authUser.api_key}`, {
+        .$post(`/collections/save/projects?token=${process.env.skey}`, {
           data: item,
         })
         .then((response) => {
@@ -484,7 +484,7 @@ export default {
 .ghost {
   opacity: 1;
   background: #fff;
-  
+
 }
 
 .drag-block{

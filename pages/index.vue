@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="6" sm="8" md="6">
+    <v-col cols="12" sm="12" md="6" class="task_item_list">
       <div
                       v-for="task in tasks"
                       :key="task._id"
@@ -15,8 +15,8 @@
 
       </div>
     </v-col>
-    
-    <v-col cols="6" sm="8" md="6">
+
+    <v-col cols="12" sm="12" md="6">
       <v-row>
         <v-col>
           <v-sheet height="64">
@@ -119,7 +119,7 @@
               dark
             >
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-              
+
             </v-toolbar>
             <v-card-text>
               <span v-html="selectedEvent.details"></span>
@@ -286,6 +286,14 @@ export default {
           return colour;
       }
   }
-  
+
 }
 </script>
+<style>
+/* Mobile */
+@media screen and (max-width: 767px) {
+  .task_item_list {
+    overflow-x: scroll;
+  }
+}
+</style>
