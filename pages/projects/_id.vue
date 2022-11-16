@@ -14,7 +14,8 @@
             class="header d-flex justify-start align-center"
             @click.prevent.stop
           >
-            <span class="mr-7 font-weight-bold">{{ project.name }}</span>
+            <span class="mr-7 font-weight-bold">{{
+                $store.commit('localStorage/SET_TITLE', project.name) }} {{ project.name }}</span>
 
             <EmployeePicker
               class="assign_picker"
@@ -288,7 +289,7 @@ export default {
   async asyncData({ $axios }) {
     const { data } = await $axios.post(
       `/cockpit/listUsers?token=${process.env.aKey}`);
-    console.log("UserData: ", data);
+    //console.log("UserData: ", data);
     return { employees: data };
   },
   computed: {
@@ -335,6 +336,7 @@ export default {
             }
           })
           .then((res) => {
+            // console.log("projectInfo", this.ProjectInfo)
             this.lists = res.info;
             this.nested = this.nest(res.tasks, null)
             this.tasks = this.nested.sort((a, b) => {

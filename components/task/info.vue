@@ -15,19 +15,19 @@
 <!--      </v-col>-->
 
 <!--      <v-col class="py-3 d-flex">-->
-        <DatePicker :entry="task" :collection="'tasks'" :authUser="authUser" :short="false"/>
-        <TaskPriority :authUser="authUser" :id="task._id" :selectedstate="task.priority"  :collection="'tasks'" class="mr-3 d-none d-sm-flex"/>
-        <EmployeePicker
-              class="assign_picker"
-              :employees="employees"
-              :assignedemp="task.assigned"
-              :id="task._id"
-              :collection="'tasks'"
-              :size="28"
-              :readonly="false"
-              :authUser="authUser"
-              :key="'task' + task._id"
-            />
+<!--        <DatePicker :entry="task" :collection="'tasks'" :authUser="authUser" :short="false"/>-->
+<!--        <TaskPriority :authUser="authUser" :id="task._id" :selectedstate="task.priority"  :collection="'tasks'" class="mr-3 d-none d-sm-flex"/>-->
+<!--        <EmployeePicker-->
+<!--              class="assign_picker"-->
+<!--              :employees="employees"-->
+<!--              :assignedemp="task.assigned"-->
+<!--              :id="task._id"-->
+<!--              :collection="'tasks'"-->
+<!--              :size="28"-->
+<!--              :readonly="false"-->
+<!--              :authUser="authUser"-->
+<!--              :key="'task' + task._id"-->
+<!--            />-->
 <!--      </v-col>-->
     </v-row>
   </v-container>
@@ -50,6 +50,7 @@ export default {
   },
   watch: {
     project(val){
+        this.$store.commit('localStorage/SET_TITLE', val.name)
         this.updateonload(val)
     }
   },

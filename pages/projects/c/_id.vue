@@ -180,10 +180,10 @@
                         @statechange="statechange($event)"
                       />
 
-                      
+
                     </div>
                     </div>
-                      
+
                     </div>
                   </draggable>
                 </div>
@@ -288,7 +288,7 @@ export default {
   async asyncData({ $axios }) {
     const { data } = await $axios.post(
       `/cockpit/listUsers?token=${process.env.aKey}`);
-    console.log("UserData: ", data);
+    //console.log("UserData: ", data);
     return { employees: data };
   },
   computed: {
@@ -357,7 +357,7 @@ export default {
           if (children.length) obj.children = children;
           r.push(obj);
         }
-        
+
         return r;
       }, []);
     },
@@ -483,7 +483,7 @@ export default {
 .ghost {
   opacity: 1;
   background: #fff;
-  
+
 }
 
 .drag-block{

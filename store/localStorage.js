@@ -38,6 +38,7 @@ export const mutations = {
   },
   increase: state => state.my_custom_value++,
   SET_TITLE(state, title) {
+    console.log('title', title)
     state.title = title
   },
   SET_USERLIST(state, list) {

@@ -231,6 +231,7 @@ export default {
   },
   computed: {
    title(){
+     console.log("Title", this.$store.state.localStorage)
      return this.$store.state.localStorage.title
    },
    authUser(){
@@ -366,7 +367,7 @@ export default {
         },
         shouldshow(){
           let path = this.$nuxt.$route.path.split('/')
-          if(path[1] == 'clients' || path[1] == 'projects' || path[1] == 't'){
+          if(path[1] == 'clients' || path[1] == 'projects'){
             return true
           }
           else{

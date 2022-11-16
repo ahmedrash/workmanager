@@ -496,7 +496,11 @@ export default {
     return { employees: data };
   },
   mounted() {
-
+    this.$nextTick(function () {
+      window.setInterval(() => {
+        this.getData()
+      },30000);
+    })
     // Attach listeners for handling clicks outside the card, while preventing propagation
     // of clicks in the cards
     this.$refs.cardContainer.addEventListener("click", this.stopPropagation);
@@ -772,6 +776,11 @@ export default {
           link: 'tasks',
           display: this.task.name
         },
+        pid: {
+          _id: this.project._id,
+          link: 'projects',
+          display: this.project.name
+        },
         by:{
             _id: this.authUser._id,
             display: this.authUser.name,
@@ -1042,6 +1051,11 @@ export default {
         this.snackbar = true
       }
     },
+  },
+  head() {
+    return {
+      title: this.project.name
+    };
   }
 };
 </script>

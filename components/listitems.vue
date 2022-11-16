@@ -7,7 +7,7 @@
                 <span class="mr-auto">{{ task.name }}</span>
             </v-btn>
         </v-col>
-       </v-row> 
+       </v-row>
     </div>
 </template>
 

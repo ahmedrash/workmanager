@@ -245,17 +245,30 @@ export default {
           .then((res) => {
             console.log("clients", res.entries);
             this.clients = res.entries.sort(function(a, b){
-              if(a.name < b.name) { return -1; }
-              if(a.name > b.name) { return 1; }
+              if(a.name.trim() < b.name.trim()) { return -1; }
+              if(a.name.trim() > b.name.trim()) { return 1; }
+
               return 0;
             });
+
+            res.entries.map((a) => {
+              if (a.projects.length > 0)
+              {
+                a.projects.sort(function(c, d){
+                  if(c.name.trim() < d.name.trim()) { return -1; }
+                  if(c.name.trim() > d.name.trim()) { return 1; }
+                  return 0
+                })
+              }
+            })
+
           });
       } catch (error) {
         console.log("error", error);
       }
     },
     openDialog(data) {
-      console.log(data);
+      // console.log("data", data);
       this.clicked = true;
       if (data.projects) {
         this.collection = "projects";
@@ -357,7 +370,7 @@ export default {
       }
     },
     gotoLink(item) {
-      console.log("2");
+      console.log("item", item);
       let link = "";
       if (item?.cid) {
         link = "/projects/" + item._id;

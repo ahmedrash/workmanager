@@ -189,6 +189,10 @@ z-index: 1;
       height: 100%;
   }
 
+  .comment_row>.col:last-child {
+    width: 60%;
+  }
+
 .comment_row .col.first{
   border-right:1px solid rgba(0, 0, 0, 0.1) !important;
   height: calc(100vh - 200px);
@@ -213,12 +217,19 @@ z-index: 1;
   .comment_row .col.first{
     display: none;
   }
+  .comment_row>.col:last-child {
+    width: 100%;
+  }
 }
 
 /* Mobile */
 @media screen and (max-width: 767px) {
   .comment_row .col.first{
     display: none;
+  }
+
+  .comment_row>.col:last-child {
+    width: 100%;
   }
 
   .task_title_block{
